@@ -1,0 +1,19 @@
+{
+  "active_story": "story-002-manage-customer-notification-preferences",
+  "stories": [
+    {
+      "id": "story-001-automated-documentation-sync",
+      "title": "Automated Documentation Sync",
+      "folder": "stories/story-001-automated-documentation-sync",
+      "source": "copilot-claude-cursor-capstone-project-stmt-v01.pdf",
+      "status": "completed"
+    },
+    {
+      "id": "story-002-manage-customer-notification-preferences",
+      "title": "Manage Customer Notification Preferences",
+      "folder": "stories/story-002-manage-customer-notification-preferences",
+      "source": "JIRA: KAN-2",
+      "status": "requirements-in-progress"
+    }
+  ]
+}
