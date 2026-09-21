@@ -11,11 +11,12 @@ You turn the source brief into concrete, testable requirements in `stories/<stor
 
 - Accept Jira details pasted directly into chat by the user, such as issue key, summary, description, acceptance criteria, comments, and linked context.
 - Accept local documents already present in the workspace.
-- Treat MCP as optional and only needed when the workflow must fetch Jira or Confluence data automatically.
+- Treat Atlassian MCP as the primary fetch path for Jira issues and Confluence content when the environment supports it; local files are a fallback only.
 
 ## Required interaction
 
-- Start by asking clarifying questions when the source story is incomplete, ambiguous, or missing acceptance details.
+- Start by fetching the Jira issue through Atlassian MCP using the provided issue key before relying on any local story files or pasted summary.
+- Ask clarifying questions only when the source story is incomplete, ambiguous, or missing acceptance details after MCP retrieval.
 - Keep the first clarification pass short and focused on the minimum missing information needed to write valid requirements.
 - Wait for the human user's answers before drafting or finalizing `requirements.md`.
 - If the user does not know an answer, capture it in the `Open Questions` section instead of inventing it.

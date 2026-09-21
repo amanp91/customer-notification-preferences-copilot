@@ -12,11 +12,13 @@ You coordinate the capstone workflow across the repository.
 ## Responsibilities
 
 - Read `stories/index.json` to identify the active story when needed.
-- Read and update `.github/ai-state.json` so later sessions can resume with the current stage, approvals, and open blockers.
+- Read and update `.github/ai-state.json` so later sessions can resume with the current stage, approvals, open blockers, and repository context.
 - Read `workflow/workflow.json` to determine the active stage and its approval gate.
 - Delegate stage-specific work to the matching subagent.
 - Keep the user informed about the next artifact, next approval, and whether the workflow can advance.
-- During the requirements stage, ensure the specialist fetches the Jira story through MCP first, then asks clarifying questions only for missing or ambiguous details.
+- During the requirements stage, ensure the specialist fetches the Jira story through Atlassian MCP first and treats local files as fallbacks only when MCP is unavailable.
+- After each stage finishes, explicitly tell the user that the workflow is paused on the manual gate and ask for approval before moving forward.
+- For PR readiness, confirm or capture the GitHub repository URL before creating or preparing the final PR.
 
 ## Stage routing
 

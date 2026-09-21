@@ -11,7 +11,23 @@ There are two layers in this repository:
 
 The product is the automated documentation sync solution. The Copilot files in this repo are the operating framework used to define, design, implement, review, verify, and later reuse that product across multiple stories.
 
+The workflow has also been tightened to enforce the operating rules that were validated in the live story flow:
+
+- Jira story intake must use Atlassian MCP first and only fall back to local files when MCP is unavailable.
+- Manual approval gates must be explicit and require human approval before the workflow advances.
+- GitHub repository context must be captured before PR readiness and final PR creation.
+- Workflow state must be persisted in `.github/ai-state.json` with active stage, blockers, approvals, and repo metadata.
+
 ## What each folder does
+
+### Root-level workflow and product files
+
+- `AGENTS.md` gives repository-level workflow rules and stage ownership that complement `.github/copilot-instructions.md`.
+- `human-in-loop.md` explains the approval model and reviewer expectations.
+- `copilot-claude-cursor-capstone-project-stmt-v01.pdf` is the original capstone problem statement and source brief for the setup story.
+- `requirements.txt` defines the Python dependencies for the implemented API in the active product story.
+
+These files sit at the root because they either apply to the whole repository or to the current product implementation, not just to a single Copilot customization folder.
 
 ### `.github/agents/`
 
@@ -86,6 +102,7 @@ Stores compact cross-session workflow state, including:
 - blockers
 - evidence summary
 - open questions
+- GitHub repository URL for PR-readiness and final PR creation
 
 Use it as durable workflow memory, not as a place for long-form analysis.
 
@@ -101,6 +118,12 @@ Contains the machine-readable stage map. [workflow/workflow.json](workflow/workf
 
 This file is the stage router. It tells the orchestrator which agent owns which step and which story artifact should be produced next.
 
+[workflow/approval-policy.json](workflow/approval-policy.json) defines the approval policy shared across manual gates:
+
+- expected manual-gate behavior
+- allowed approval decision values
+- where approval decisions must be recorded
+
 ### `stories/`
 
 Contains one folder per story. Each story folder owns its own requirements, architecture, design review, implementation plan, implementation notes, review, verification notes, and PR description.
@@ -110,6 +133,18 @@ Contains one folder per story. Each story folder owns its own requirements, arch
 - [stories/story-001-automated-documentation-sync](stories/story-001-automated-documentation-sync) is the current active story workspace.
 
 This is where the actual SDLC outputs live. Shared Copilot files tell the workflow how to behave, but `stories/` is where the real deliverables are written.
+
+### `app/`
+
+Contains the actual product implementation code produced for a story. For example, the active `Manage Customer Notification Preferences` story uses [app/main.py](app/main.py) for the FastAPI API implementation.
+
+### `tests/`
+
+Contains executable verification assets for the implemented product behavior. For example, [tests/test_preferences_api.py](tests/test_preferences_api.py) validates the notification preferences API behavior for the current story.
+
+### `.vscode/`
+
+Contains editor-level convenience settings, currently including [`.vscode/tasks.json`](.vscode/tasks.json), which exposes the validation script as a runnable VS Code task.
 
 ### `scripts/`
 
@@ -128,18 +163,22 @@ The repository works as a chain of control and output:
 5. `.github/hooks/` reinforces runtime policy, especially approval discipline.
 6. `.github/skills/` supplies domain knowledge for the actual solution being built.
 7. `workflow/workflow.json` defines the step order, owners, and outputs.
-8. `stories/index.json` selects the active story.
-9. `stories/<story-id>/...` stores the actual requirements, architecture, reviews, verification notes, and PR draft.
-10. `.github/ai-state.json` stores the compact cross-session snapshot of progress.
-11. `scripts/validate-copilot-setup.ps1` checks that the structure is still valid.
+8. `workflow/approval-policy.json` defines the approval rules that manual-gate artifacts must follow.
+9. `stories/index.json` selects the active story.
+10. `stories/<story-id>/...` stores the actual requirements, architecture, reviews, verification notes, and PR draft.
+11. `.github/ai-state.json` stores the compact cross-session snapshot of progress.
+12. `scripts/validate-copilot-setup.ps1` checks that the structure is still valid.
+13. `app/`, `tests/`, and `requirements.txt` hold the product implementation and executable verification for the active delivery story.
 
 In short:
 
 - `workflow/` decides what should happen next
+- `workflow/approval-policy.json` decides what valid approval recording looks like
 - `.github/agents/` decides who should do it
 - `.github/instructions/` and `.github/hooks/` constrain how it should happen
 - `stories/` stores what was produced
 - `.github/ai-state.json` remembers where the process currently stands
+- `app/` and `tests/` hold the implemented software and its executable checks
 
 ## Example: Jira ticket to PR-ready output
 
@@ -205,6 +244,8 @@ For a Jira ticket like `DOC-123`, the main files involved would be:
 - approval enforcement: [.github/hooks/manual-gates.json](.github/hooks/manual-gates.json)
 - story output: [stories/story-001-automated-documentation-sync/requirements.md](stories/story-001-automated-documentation-sync/requirements.md)
 - progress memory: [.github/ai-state.json](.github/ai-state.json)
+- product code for an implementation story: [app/main.py](app/main.py)
+- executable tests for an implementation story: [tests/test_preferences_api.py](tests/test_preferences_api.py)
 - final PR structure: [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
 - setup validation: [scripts/validate-copilot-setup.ps1](scripts/validate-copilot-setup.ps1)
 
@@ -249,6 +290,8 @@ Manual approval gates currently exist for:
 - review
 - PR readiness
 
+The workflow must explicitly tell the user which gate is waiting and ask for approval before continuing. The human approval is not optional for these transitions.
+
 Approval expectations are documented in [human-in-loop.md](human-in-loop.md).
 
 ## Input mode
@@ -258,8 +301,19 @@ The intended source-of-truth flow is MCP-first:
 - provide a Jira issue key or identifier in chat
 - let the requirements workflow fetch story details through Jira MCP tools
 - answer only the clarifying questions that remain after retrieval
+- treat local documents as a fallback path only when MCP data is unavailable or incomplete
 
-Local documents can still be used as supplementary context, but Jira via MCP is the primary intake path for this solution.
+Local documents can still be used as supplementary context, but Jira via Atlassian MCP is the primary intake path for this solution.
+
+## Updated workflow requirements
+
+The workflow now enforces these operational rules during a real story run:
+
+- Before writing requirements, the orchestrator must fetch the Jira issue through Atlassian MCP and summarize the retrieved story details.
+- If a manual gate is reached, the workflow must say it is paused for approval and wait for explicit human approval before continuing.
+- The orchestrator must persist current state in `.github/ai-state.json`, including blockers, approvals, and any GitHub repo metadata known at that stage.
+- Before PR creation, the workflow must confirm or capture the GitHub repository URL. It should not proceed as if the repo is known when it is missing.
+- The end-to-end story flow is considered valid only when the source data, approvals, and repo context all line up with the active stage.
 
 ## Multi-story usage
 

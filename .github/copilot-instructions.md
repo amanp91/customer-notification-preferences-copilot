@@ -7,6 +7,7 @@ Use this repository to drive the capstone workflow from requirements through PR 
 ## Workflow rules
 
 - Treat `workflow/workflow.json` as the source of truth for stage order.
+- Treat `workflow/approval-policy.json` as the source of truth for allowed approval decisions and approval-record expectations.
 - Keep each stage focused on its named output artifact in the active story folder.
 - Use `stories/index.json` to identify the active story when more than one story exists.
 - Use `.github/ai-state.json` for durable workflow state between sessions.

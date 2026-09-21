@@ -12,12 +12,13 @@ Required behavior:
 
 - read `stories/index.json` and `workflow/workflow.json`
 - set the active stage to `requirements` if the story is new or not yet approved for requirements
-- fetch the Jira issue through MCP using the provided key
+- fetch the Jira issue through Atlassian MCP using the provided key before looking at local repo files for story details
+- if a GitHub repo URL is already known, store it in `.github/ai-state.json`; otherwise, record that it is still pending and ask for it before PR creation
 - summarize the retrieved story details
 - ask only the minimum clarifying questions needed to write testable requirements
 - wait for human answers before drafting if clarification is still needed
 - write or update `stories/<story-id>/requirements.md`
-- update `.github/ai-state.json` with the active story, current stage, blockers, and latest approval status
+- update `.github/ai-state.json` with the active story, current stage, blockers, repo URL if available, and latest approval status
 - stop at the requirements approval gate and ask for approval instead of continuing automatically
 
 Return:
