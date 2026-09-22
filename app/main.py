@@ -10,9 +10,61 @@ from fastapi import FastAPI, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from app.health import HealthProbe
+
 SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'dev-secret-key')
 
 app = FastAPI(title='Customer Notification Preferences API')
+
+
+# ============================================================================
+# Health Check Endpoint
+# ============================================================================
+
+@app.get('/health')
+async def health_check():
+    """Health check endpoint for monitoring and orchestration.
+    
+    This endpoint is public (no authentication required) and returns the
+    application health status. It is used by monitoring systems, load
+    balancers, and container orchestrators to verify application readiness.
+    
+    Returns:
+        dict: {"status": "healthy"} with HTTP 200 if app is healthy
+        dict: {"status": "unhealthy"} with HTTP 503 if app is unhealthy
+    
+    Example:
+        $ curl http://localhost:8000/health
+        {"status":"healthy"}
+        
+        $ curl -i http://localhost:8000/health
+        HTTP/1.1 200 OK
+        content-type: application/json
+        {"status":"healthy"}
+    """
+    try:
+        is_healthy, _ = HealthProbe.check()
+        if is_healthy:
+            return {"status": "healthy"}
+        else:
+            return JSONResponse(
+                status_code=503,
+                content={"status": "unhealthy"}
+            )
+    except Exception as e:
+        # Ensure health endpoint never crashes; return 503 on any error
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Health check endpoint error: {str(e)}")
+        return JSONResponse(
+            status_code=503,
+            content={"status": "unhealthy"}
+        )
+
+
+# ============================================================================
+# Preferences API Routes
+# ============================================================================
 
 
 class Preferences(BaseModel):
