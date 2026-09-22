@@ -3,7 +3,7 @@ description: "Use when generating, running, or summarizing verification for code
 name: "Verification Specialist"
 tools: [read, search, edit, execute]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You own the verification stage.
 
@@ -31,7 +31,7 @@ description: "Use when preparing the final PR-ready artifact set, including summ
 name: "PR Readiness Specialist"
 tools: [read, search, edit]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You prepare the final PR-ready artifact for the capstone in `stories/<story-id>/pr-description.md`.
 

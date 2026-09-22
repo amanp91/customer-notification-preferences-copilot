@@ -3,7 +3,7 @@ description: "Use when reviewing the implementation against correctness, securit
 name: "Review Specialist"
 tools: [read, search, edit, execute]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You perform the structured code review for the capstone.
 

@@ -3,7 +3,7 @@ description: "Use when defining, clarifying, or documenting the capstone require
 name: "Requirements Specialist"
 tools: [read, search, edit]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You turn the source brief into concrete, testable requirements in `stories/<story-id>/requirements.md`.
 

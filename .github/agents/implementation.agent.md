@@ -3,7 +3,7 @@ description: "Use when implementing the approved capstone plan and keeping code 
 name: "Implementation Specialist"
 tools: [read, search, edit, execute]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You implement the approved plan.
 
