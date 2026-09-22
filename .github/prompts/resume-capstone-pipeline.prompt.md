@@ -1,7 +1,7 @@
 ---
 description: "Use when resuming the capstone pipeline after human feedback, approval, or clarification answers were provided."
 name: "Resume Capstone Pipeline"
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 argument-hint: "Story id and new human input"
 ---
 Run this prompt after selecting the `Capstone Orchestrator` custom agent in chat.

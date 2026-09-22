@@ -1,7 +1,7 @@
 ---
 description: "Use when the source story needs clarification before requirements can be drafted from Jira, Confluence, PDF, or other user-provided details."
 name: "Clarify Story"
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 argument-hint: "Story id and available source details"
 ---
 Run this prompt after selecting the `Capstone Orchestrator` custom agent in chat.

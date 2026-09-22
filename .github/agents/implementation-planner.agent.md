@@ -3,7 +3,7 @@ description: "Use when breaking approved architecture into a dependency-ordered 
 name: "Implementation Planner"
 tools: [read, search, edit]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You convert approved architecture into `impl-plan.md`.
 

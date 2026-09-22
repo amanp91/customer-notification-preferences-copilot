@@ -1,7 +1,7 @@
 ---
 description: "Use when starting or continuing a capstone SDLC stage with the orchestrator agent."
 name: "Run Capstone Stage"
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 argument-hint: "Story id, stage, source artifact, and requested outcome"
 ---
 Run this prompt after selecting the `Capstone Orchestrator` custom agent in chat.

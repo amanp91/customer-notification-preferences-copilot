@@ -1,7 +1,7 @@
 ---
 description: "Use when starting the capstone pipeline from a Jira issue key so Copilot fetches the story through MCP and begins requirements processing."
 name: "Start Capstone Pipeline"
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 argument-hint: "Story id and Jira issue key"
 ---
 Run this prompt after selecting the `Capstone Orchestrator` custom agent in chat.

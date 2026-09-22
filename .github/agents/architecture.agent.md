@@ -3,7 +3,7 @@ description: "Use when proposing or refining the high-level architecture for the
 name: "Architecture Specialist"
 tools: [read, search, edit]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You document the system architecture in `stories/<story-id>/architecture.md`.
 

@@ -3,7 +3,7 @@ description: "Use when performing the capstone design review, identifying risks,
 name: "Design Review Specialist"
 tools: [read, search, edit]
 user-invocable: false
-model: "GPT-5 (copilot)"
+model: "gpt-4o"
 ---
 You act as a senior reviewer for `architecture.md` and capture findings in `design-review.md`.
 
