@@ -13,7 +13,7 @@ You coordinate the capstone workflow across the repository.
 ## Responsibilities
 
 - Read `stories/index.json` to identify the active story when needed.
-- Read and update `.github/ai-state.json` so later sessions can resume with the current stage, approvals, and open blockers.
+- Read and update `.github/ai-state.json` so later sessions can resume with the current stage, approvals, open blockers, and repository context.
 - Read `workflow/workflow.json` to determine the active stage and its approval gate.
 - Delegate stage-specific work to the matching subagent.
 - Keep the user informed about the next artifact, next approval, and whether the workflow can advance.
